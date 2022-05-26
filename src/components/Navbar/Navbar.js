@@ -1,21 +1,12 @@
-import {useState} from "react";
-import Welcome from "../Welcome";
+import { useEffect, useState, useContext } from "react";
+import Login from "../Login";
+// import Welcome from "../Welcome";
 
+import { TransactionContext } from "../../context/TransactionContext";
 
 const Navbar = () => {
-   const [isConnected, setIsConnected] = useState(false)
+   const { connectWallet } = useContext(TransactionContext);
 
-   const onLogin = () => {
-      setIsConnected(true);
-   }
-
-   // const onLogout = () => {
-   //    setIsConnected(false);
-   // }
-
-   const onLoginHandler =() => {
-      onLogin(false)
-   }
    return (
       <div className="navbar bg-[#1e2230] h-20 py-5">
          <div className="container text-xl flex justify-between align-middle items-center text-center py-2 max-w-7xl mx-auto">
@@ -27,15 +18,14 @@ const Navbar = () => {
                <li>Products</li>
                <li>Contact</li>
             </ul>
-            {!isConnected &&
-            <button  onClick={onLoginHandler} className="btn">Connect Wallet</button>
-          
-            }
-            {/* <div className="hamburger"></div> */}
-            {isConnected && <Welcome/>}
-         </div>
 
-         
+            <button onClick={connectWallet} className="btn">
+               Connect Wallet
+            </button>
+
+            {/* <div className="hamburger"></div> */}
+            {/* {isConnected && <Welcome/>} */}
+         </div>
       </div>
    );
 };
