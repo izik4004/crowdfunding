@@ -22,14 +22,53 @@ const getEthereumContract = () => {
 
 export const TransactionProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState("")
+    const [formData, setFormData] = useState({
+        minimumAmount:"", fundGoals:""
+    })
+
+
+    const handleChange = (e, name) => {
+        setFormData((prevState) => ({...prevState, [name]: e.target.value}));
+    }
 
     const checkIfWalletIsConnected = async () => {
-        if(!ethereum) return alert("Please install metamask");
+
+        try {
+            if(!ethereum) return alert("Please install metamask");
 
         const accounts = await ethereum.request({method: 'eth_requestAccounts'});
 
-        console.log(accounts);
+        if(accounts.length) {
+            setCurrentAccount(accounts[0])
+
+           
+        } else {
+            console.log ("No account found")
+        }
+       
+        } catch (error) {
+            console.log(error);
+
+            throw new Error("No ethereum object")
+
+        }
+        
     }
+
+
+const createCampaign = async () => {
+    try {
+        if(!ethereum) return alert("Please install metamask")
+        const { minimumAmount, fundGoal} = formData;
+        getEthereumContract();
+    } catch (error) {
+        console.log(error)
+    }
+    throw new Error("No ethereum object")
+
+}
+
+
 
     const connectWallet = async () => {
         try {
@@ -37,6 +76,7 @@ export const TransactionProvider = ({children}) => {
 
             const accounts = await ethereum.request({ method: 'eth_requestAccounts'});
        
+            
             setCurrentAccount(accounts[0]);
         } catch (error) {
             console.log(error);
@@ -49,10 +89,10 @@ export const TransactionProvider = ({children}) => {
 
     useEffect(() => {
         checkIfWalletIsConnected();
-        connectWallet();
-    })
+        // connectWallet();
+    }, [])
     return (
-        <TransactionContext.Provider value={{connectWallet}}>
+        <TransactionContext.Provider value={{connectWallet, createCampaign,  currentAccount, handleChange, formData, setFormData}}>
             {children}
         </TransactionContext.Provider>
     );

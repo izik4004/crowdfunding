@@ -5,7 +5,7 @@ import Login from "../Login";
 import { TransactionContext } from "../../context/TransactionContext";
 
 const Navbar = () => {
-   const { connectWallet } = useContext(TransactionContext);
+   const { connectWallet, currentAccount } = useContext(TransactionContext);
 
    return (
       <div className="navbar bg-[#1e2230] h-20 py-5">
@@ -18,11 +18,11 @@ const Navbar = () => {
                <li>Products</li>
                <li>Contact</li>
             </ul>
-
+{!currentAccount && (
             <button onClick={connectWallet} className="btn">
                Connect Wallet
             </button>
-
+            )}
             {/* <div className="hamburger"></div> */}
             {/* {isConnected && <Welcome/>} */}
          </div>
